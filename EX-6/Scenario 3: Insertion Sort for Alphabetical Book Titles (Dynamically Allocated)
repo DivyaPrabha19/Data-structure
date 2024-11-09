@@ -1,0 +1,47 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void insertionSort(char **arr, int n) {
+    for (int i = 1; i < n; i++) {
+        char *key = arr[i];
+        int j = i - 1;
+        while (j >= 0 && strcmp(arr[j], key) > 0) {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+        arr[j + 1] = key;
+    }
+}
+
+void printArray(char **arr, int n) {
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", arr[i]);
+    }
+}
+
+int main() {
+    int n;
+    printf("Enter number of books: ");
+    scanf("%d", &n);
+    getchar();  // Consume the newline character
+
+    char **titles = malloc(n * sizeof(char *));
+    printf("Enter book titles:\n");
+    for (int i = 0; i < n; i++) {
+        titles[i] = malloc(50 * sizeof(char));
+        fgets(titles[i], 50, stdin);
+        titles[i][strcspn(titles[i], "\n")] = '\0';  // Remove newline character
+    }
+
+    insertionSort(titles, n);
+
+    printf("\nSorted book titles:\n");
+    printArray(titles, n);
+
+    for (int i = 0; i < n; i++) {
+        free(titles[i]);
+    }
+    free(titles);
+    return 0;
+}
