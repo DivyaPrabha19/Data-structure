@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Customer {
+    char name[100];
+    struct Customer* next;
+} Customer;
+
+Customer* front = NULL;
+Customer* rear = NULL;
+
+void enqueueCustomer(char *name) {
+    Customer* newCustomer = (Customer*)malloc(sizeof(Customer));
+    strcpy(newCustomer->name, name);
+    newCustomer->next = NULL;
+
+    if (rear == NULL) {
+        front = rear = newCustomer;
+    } else {
+        rear->next = newCustomer;
+        rear = newCustomer;
+    }
+    printf("Customer '%s' added to the queue.\n", name);
+}
+
+void dequeueCustomer() {
+    if (front == NULL) {
+        printf("No customers in the queue.\n");
+    } else {
+        Customer* temp = front;
+        printf("Serving customer: %s\n", front->name);
+        front = front->next;
+        free(temp);
+    }
+}
+
+void displayQueue() {
+    if (front == NULL) {
+        printf("No customers in the queue.\n");
+    } else {
+        printf("Current Bank Queue:\n");
+        Customer* temp = front;
+        while (temp != NULL) {
+            printf("%s\n", temp->name);
+            temp = temp->next;
+        }
+    }
+}
+
+int main() {
+    enqueueCustomer("Customer 1");
+    enqueueCustomer("Customer 2");
+    displayQueue();
+    dequeueCustomer();
+    displayQueue();
+    return 0;
+}
+OUTPUT:
+Customer 'Customer 1' added to the queue.
+Customer 'Customer 2' added to the queue.
+Current Bank Queue:
+Customer 1
+Customer 2
+Serving customer: Customer 1
+Current Bank Queue:
+Customer 2
