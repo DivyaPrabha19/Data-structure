@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_QUEUE 5
+#define JOB_NAME_SIZE 100
+
+char printQueue[MAX_QUEUE][JOB_NAME_SIZE];
+int front = -1, rear = -1;
+
+void enqueue(char *job) {
+    if (rear == MAX_QUEUE - 1) {
+        printf("Print queue is full.\n");
+    } else {
+        if (front == -1) front = 0;
+        rear++;
+        strcpy(printQueue[rear], job);
+        printf("Job '%s' added to the queue.\n", job);
+    }
+}
+
+void dequeue() {
+    if (front == -1 || front > rear) {
+        printf("No print jobs in the queue.\n");
+    } else {
+        printf("Processing job: %s\n", printQueue[front]);
+        front++;
+    }
+}
+
+void displayQueue() {
+    if (front == -1 || front > rear) {
+        printf("No jobs in the queue.\n");
+    } else {
+        printf("Current Print Queue:\n");
+        for (int i = front; i <= rear; i++) {
+            printf("%s\n", printQueue[i]);
+        }
+    }
+}
+
+int main() {
+    enqueue("Job 1: Print Document 1");
+    enqueue("Job 2: Print Document 2");
+    displayQueue();
+    dequeue();
+    displayQueue();
+    return 0;
+}
+OUTPUT:
+Job 'Job 1: Print Document 1' added to the queue.
+Job 'Job 2: Print Document 2' added to the queue.
+Current Print Queue:
+Job 1: Print Document 1
+Job 2: Print Document 2
+Processing job: Job 1: Print Document 1
+Current Print Queue:
+Job 2: Print Document 2
