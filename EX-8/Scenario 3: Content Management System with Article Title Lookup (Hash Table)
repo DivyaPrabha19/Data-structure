@@ -1,0 +1,92 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Article {
+    char title[50];
+    char content[200];
+    struct Article *next;
+} Article;
+
+Article *hashTable[TABLE_SIZE] = { NULL };
+
+int hashFunction(const char *title) {
+    int hash = 0;
+    while (*title) {
+        hash = (hash + *title) % TABLE_SIZE;
+        title++;
+    }
+    return hash;
+}
+
+void insertArticle(const char *title, const char *content) {
+    int index = hashFunction(title);
+    Article *newArticle = (Article *)malloc(sizeof(Article));
+    strcpy(newArticle->title, title);
+    strcpy(newArticle->content, content);
+    newArticle->next = hashTable[index];
+    hashTable[index] = newArticle;
+}
+
+Article *searchArticle(const char *title) {
+    int index = hashFunction(title);
+    Article *temp = hashTable[index];
+    while (temp) {
+        if (strcmp(temp->title, title) == 0) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+int main() {
+    char title[50], content[200];
+    int choice;
+
+    while (1) {
+        printf("1. Add article\n2. Search article\n3. Exit\nEnter choice: ");
+        scanf("%d", &choice);
+        getchar();  // Consume newline
+        if (choice == 3) break;
+
+        if (choice == 1) {
+            printf("Enter article title: ");
+            fgets(title, 50, stdin);
+            title[strcspn(title, "\n")] = '\0';  // Remove newline
+
+            printf("Enter article content: ");
+            fgets(content, 200, stdin);
+            content[strcspn(content, "\n")] = '\0';  // Remove newline
+
+            insertArticle(title, content);
+            printf("Article '%s' added.\n", title);
+        } else if (choice == 2) {
+            printf("Enter article title to search: ");
+            fgets(title, 50, stdin);
+            title[strcspn(title, "\n")] = '\0';  // Remove newline
+
+            Article *article = searchArticle(title);
+            if (article) {
+                printf("Article found: Title=%s, Content=%s\n", article->title, article->content);
+            } else {
+                printf("Article with title '%s' not found.\n", title);
+            }
+        }
+    }
+    return 0;
+}
+OUTPUT:
+1. Add article
+2. Search article
+3. Exit
+Enter choice: 1
+Enter article title: Climate Change
+Enter article content: The impacts of climate change are far-reaching.
+Article 'Climate Change' added.
+
+Enter choice: 2
+Enter article title to search: Climate Change
+Article found: Title=Climate Change, Content=The impacts of climate change are far-reaching.
