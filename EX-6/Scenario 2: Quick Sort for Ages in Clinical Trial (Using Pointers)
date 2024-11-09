@@ -49,3 +49,9 @@ int main() {
     free(ages);
     return 0;
 }
+OUTPUT:
+Enter number of participants: 4
+Enter ages of participants:
+56 22 34 19
+Sorted ages:
+19 22 34 56
