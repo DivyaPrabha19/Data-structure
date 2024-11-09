@@ -1,0 +1,102 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Book {
+    char title[100];
+    struct Book* prev;
+    struct Book* next;
+} Book;
+
+Book* head = NULL;
+Book* tail = NULL;
+
+void addBook(char *bookTitle) {
+    Book* newBook = (Book*)malloc(sizeof(Book));
+    strcpy(newBook->title, bookTitle);
+    newBook->prev = NULL;
+    newBook->next = NULL;
+
+    if (head == NULL) {
+        head = tail = newBook;
+    } else {
+        tail->next = newBook;
+        newBook->prev = tail;
+        tail = newBook;
+    }
+}
+
+void removeBook(char *bookTitle) {
+    Book* temp = head;
+
+    while (temp != NULL && strcmp(temp->title, bookTitle) != 0) {
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Book not found.\n");
+        return;
+    }
+
+    if (temp->prev != NULL) {
+        temp->prev->next = temp->next;
+    } else {
+        head = temp->next;
+    }
+
+    if (temp->next != NULL) {
+        temp->next->prev = temp->prev;
+    } else {
+        tail = temp->prev;
+    }
+
+    free(temp);
+}
+
+void displayBooksForward() {
+    Book* temp = head;
+    while (temp != NULL) {
+        printf("%s\n", temp->title);
+        temp = temp->next;
+    }
+}
+
+void displayBooksBackward() {
+    Book* temp = tail;
+    while (temp != NULL) {
+        printf("%s\n", temp->title);
+        temp = temp->prev;
+    }
+}
+
+int main() {
+    addBook("Book 1");
+    addBook("Book 2");
+    addBook("Book 3");
+
+    printf("Books in forward order:\n");
+    displayBooksForward();
+    
+    printf("\nBooks in reverse order:\n");
+    displayBooksBackward();
+    
+    removeBook("Book 2");
+    printf("\nBooks after removal:\n");
+    displayBooksForward();
+    
+    return 0;
+}
+OUTPUT:
+Books in forward order:
+Book 1
+Book 2
+Book 3
+
+Books in reverse order:
+Book 3
+Book 2
+Book 1
+
+Books after removal:
+Book 1
+Book 3
