@@ -54,3 +54,11 @@ int main() {
     free(prices);
     return 0;
 }
+
+OUTPUT:
+Enter number of products: 5
+Enter product prices:
+45 12 34 5 19
+Sorted prices:
+5 12 19 34 45
+
