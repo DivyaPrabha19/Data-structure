@@ -1,0 +1,65 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+
+#define MAX_STACK 100
+
+// Stack to hold integer values
+int stack[MAX_STACK];
+int top = -1;
+
+void push(int value) {
+    if (top < MAX_STACK - 1) {
+        stack[++top] = value;
+    }
+}
+
+int pop() {
+    if (top >= 0) {
+        return stack[top--];
+    }
+    return -1; // Return -1 if stack is empty
+}
+
+int evaluatePostfix(char* expression) {
+    for (int i = 0; expression[i] != '\0'; i++) {
+        char token = expression[i];
+
+        // If token is a space, continue
+        if (token == ' ') continue;
+
+        // If token is a number, push it onto the stack
+        if (isdigit(token)) {
+            push(token - '0');
+        } 
+        // If token is an operator, pop two values, apply operator, and push the result
+        else {
+            int operand2 = pop();
+            int operand1 = pop();
+            switch (token) {
+                case '+':
+                    push(operand1 + operand2);
+                    break;
+                case '-':
+                    push(operand1 - operand2);
+                    break;
+                case '*':
+                    push(operand1 * operand2);
+                    break;
+                case '/':
+                    push(operand1 / operand2);
+                    break;
+            }
+        }
+    }
+    return pop();
+}
+
+int main() {
+    char postfixExpression[] = "23 45 + 6 *";
+    int result = evaluatePostfix(postfixExpression);
+    printf("Result: %d\n", result); // Expected output: 30
+    return 0;
+}
+OUTPUT:
+Result: 30
