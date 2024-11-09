@@ -45,3 +45,14 @@ int main() {
     free(titles);
     return 0;
 }
+OUTPUT:
+Enter number of books: 3
+Enter book titles:
+The Great Gatsby
+Pride and Prejudice
+1984
+
+Sorted book titles:
+1984
+Pride and Prejudice
+The Great Gatsby
