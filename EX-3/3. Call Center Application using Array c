@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_QUEUE 5
+#define CALLER_NAME_SIZE 100
+
+char callQueue[MAX_QUEUE][CALLER_NAME_SIZE];
+int front = -1, rear = -1;
+
+void enqueueCall(char *caller) {
+    if (rear == MAX_QUEUE - 1) {
+        printf("Call queue is full.\n");
+    } else {
+        if (front == -1) front = 0;
+        rear++;
+        strcpy(callQueue[rear], caller);
+        printf("Call from '%s' added to the queue.\n", caller);
+    }
+}
+
+void dequeueCall() {
+    if (front == -1 || front > rear) {
+        printf("No calls in the queue.\n");
+    } else {
+        printf("Serving call from: %s\n", callQueue[front]);
+        front++;
+    }
+}
+
+void displayQueue() {
+    if (front == -1 || front > rear) {
+        printf("No calls in the queue.\n");
+    } else {
+        printf("Current Call Queue:\n");
+        for (int i = front; i <= rear; i++) {
+            printf("%s\n", callQueue[i]);
+        }
+    }
+}
+
+int main() {
+    enqueueCall("Caller 1");
+    enqueueCall("Caller 2");
+    displayQueue();
+    dequeueCall();
+    displayQueue();
+    return 0;
+}
+OUTPUT:
+Call from 'Caller 1' added to the queue.
+Call from 'Caller 2' added to the queue.
+Current Call Queue:
+Caller 1
+Caller 2
+Serving call from: Caller 1
+Current Call Queue:
+Caller 2
