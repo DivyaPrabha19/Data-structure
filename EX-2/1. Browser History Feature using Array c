@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_HISTORY 10
+#define URL_SIZE 100
+
+char browserHistory[MAX_HISTORY][URL_SIZE];
+int historyCount = 0;
+
+void visitURL(char *url) {
+    if (historyCount < MAX_HISTORY) {
+        strcpy(browserHistory[historyCount], url);
+        historyCount++;
+    } else {
+        printf("History is full.\n");
+    }
+}
+
+void goBack() {
+    if (historyCount > 0) {
+        historyCount--;
+        printf("Went back to: %s\n", browserHistory[historyCount]);
+    } else {
+        printf("No history to go back to.\n");
+    }
+}
+
+void displayHistory() {
+    if (historyCount == 0) {
+        printf("No history.\n");
+    } else {
+        printf("Browser History:\n");
+        for (int i = 0; i < historyCount; i++) {
+            printf("%s\n", browserHistory[i]);
+        }
+    }
+}
+
+int main() {
+    visitURL("www.google.com");
+    visitURL("www.facebook.com");
+    visitURL("www.github.com");
+    
+    displayHistory();
+    
+    goBack();
+    displayHistory();
+    
+    return 0;
+}
+OUTPUT:
+Browser History:
+www.google.com
+www.facebook.com
+www.github.com
+Went back to: www.facebook.com
+Browser History:
+www.google.com
+www.facebook.com
