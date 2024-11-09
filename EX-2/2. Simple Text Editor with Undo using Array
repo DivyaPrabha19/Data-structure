@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_UNDO 10
+#define CHANGE_SIZE 100
+
+char undoStack[MAX_UNDO][CHANGE_SIZE];
+int undoCount = 0;
+
+void makeChange(char *change) {
+    if (undoCount < MAX_UNDO) {
+        strcpy(undoStack[undoCount], change);
+        undoCount++;
+    } else {
+        printf("Undo stack is full.\n");
+    }
+}
+
+void undoChange() {
+    if (undoCount > 0) {
+        undoCount--;
+        printf("Undid change: %s\n", undoStack[undoCount]);
+    } else {
+        printf("No changes to undo.\n");
+    }
+}
+
+void displayUndoHistory() {
+    if (undoCount == 0) {
+        printf("No changes made.\n");
+    } else {
+        printf("Undo History:\n");
+        for (int i = 0; i < undoCount; i++) {
+            printf("%s\n", undoStack[i]);
+        }
+    }
+}
+
+int main() {
+    makeChange("Added 'Hello'");
+    makeChange("Deleted 'World'");
+    
+    displayUndoHistory();
+    
+    undoChange();
+    displayUndoHistory();
+    
+    return 0;
+}
+OUTPUT:
+Undo History:
+Added 'Hello'
+Deleted 'World'
+Undid change: Deleted 'World'
+Undo History:
+Added 'Hello'
