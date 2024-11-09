@@ -1,0 +1,52 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Move {
+    char description[100];
+    struct Move* next;
+} Move;
+
+Move* top = NULL;
+
+void pushMove(char *moveDescription) {
+    Move* newMove = (Move*)malloc(sizeof(Move));
+    strcpy(newMove->description, moveDescription);
+    newMove->next = top;
+    top = newMove;
+}
+
+void popMove() {
+    if (top != NULL) {
+        Move* temp = top;
+        top = top->next;
+        free(temp);
+    } else {
+        printf("No moves to pop.\n");
+    }
+}
+
+void displayMoves() {
+    Move* temp = top;
+    while (temp != NULL) {
+        printf("%s\n", temp->description);
+        temp = temp->next;
+    }
+}
+
+int main() {
+    pushMove("Move 1: Player moves forward");
+    pushMove("Move 2: Player jumps");
+    printf("Current Moves:\n");
+    displayMoves();
+    popMove();
+    printf("\nMoves after undo:\n");
+    displayMoves();
+    return 0;
+}
+OUTPUT:
+Current Moves:
+Move 2: Player jumps
+Move 1: Player moves forward
+
+Moves after undo:
+Move 1: Player moves forward
