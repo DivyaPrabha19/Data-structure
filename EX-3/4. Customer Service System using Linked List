@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Inquiry {
+    char customerName[100];
+    struct Inquiry* next;
+} Inquiry;
+
+Inquiry* front = NULL;
+Inquiry* rear = NULL;
+
+void addInquiry(char *name) {
+    Inquiry* newInquiry = (Inquiry*)malloc(sizeof(Inquiry));
+    strcpy(newInquiry->customerName, name);
+    newInquiry->next = NULL;
+    
+    if (rear == NULL) {
+        front = rear = newInquiry;
+    } else {
+        rear->next = newInquiry;
+        rear = newInquiry;
+    }
+    printf("Inquiry from '%s' added to the queue.\n", name);
+}
+
+void resolveInquiry() {
+    if (front == NULL) {
+        printf("No inquiries to resolve.\n");
+    } else {
+        Inquiry* temp = front;
+        printf("Resolving inquiry from: %s\n", front->customerName);
+        front = front->next;
+        free(temp);
+    }
+}
+
+void displayQueue() {
+    if (front == NULL) {
+        printf("No inquiries in the queue.\n");
+    } else {
+        printf("Current Customer Inquiries:\n");
+        Inquiry* temp = front;
+        while (temp != NULL) {
+            printf("%s\n", temp->customerName);
+            temp = temp->next;
+        }
+    }
+}
+
+int main() {
+    addInquiry("Customer 1");
+    addInquiry("Customer 2");
+    displayQueue();
+    resolveInquiry();
+    displayQueue();
+    return 0;
+}
+OUTPUT:
+Inquiry from 'Customer 1' added to the queue.
+Inquiry from 'Customer 2' added to the queue.
+Current Customer Inquiries:
+Customer 1
+Customer 2
+Resolving inquiry from: Customer 1
+Current Customer Inquiries:
+Customer 2
