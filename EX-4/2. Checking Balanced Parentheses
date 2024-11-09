@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define MAX_STACK 100
+
+char stack[MAX_STACK];
+int top = -1;
+
+void push(char ch) {
+    if (top < MAX_STACK - 1) {
+        stack[++top] = ch;
+    }
+}
+
+char pop() {
+    if (top >= 0) {
+        return stack[top--];
+    }
+    return -1; // Return -1 if stack is empty
+}
+
+int isBalanced(char* expression) {
+    for (int i = 0; expression[i] != '\0'; i++) {
+        char token = expression[i];
+
+        // Push opening brackets to the stack
+        if (token == '(' || token == '{' || token == '[') {
+            push(token);
+        } 
+        // Check closing brackets
+        else if (token == ')' || token == '}' || token == ']') {
+            char topChar = pop();
+            if ((token == ')' && topChar != '(') || 
+                (token == '}' && topChar != '{') || 
+                (token == ']' && topChar != '[')) {
+                return 0; // Mismatch found
+            }
+        }
+    }
+
+    return top == -1; // Stack should be empty if balanced
+}
+
+int main() {
+    char code[] = "if (x > 0) { return (x); }";
+    if (isBalanced(code)) {
+        printf("Balanced\n");
+    } else {
+        printf("Syntax error: unmatched closing bracket\n");
+    }
+    return 0;
+}
+OUTPUT:
+Balanced
