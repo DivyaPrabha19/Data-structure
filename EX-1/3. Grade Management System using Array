@@ -1,0 +1,45 @@
+#include <stdio.h>
+
+#define MAX_GRADES 100
+
+int grades[MAX_GRADES];
+int gradeCount = 0;
+
+void addGrade(int grade) {
+    if (gradeCount < MAX_GRADES) {
+        grades[gradeCount] = grade;
+        gradeCount++;
+    } else {
+        printf("Grade list is full.\n");
+    }
+}
+
+void displayGrades() {
+    for (int i = 0; i < gradeCount; i++) {
+        printf("%d\n", grades[i]);
+    }
+}
+
+float calculateAverage() {
+    int sum = 0;
+    for (int i = 0; i < gradeCount; i++) {
+        sum += grades[i];
+    }
+    return (float)sum / gradeCount;
+}
+
+int main() {
+    addGrade(85);
+    addGrade(90);
+    addGrade(78);
+    printf("Grades:\n");
+    displayGrades();
+    printf("Average Grade: %.2f\n", calculateAverage());
+    return 0;
+}
+OUTPUT:
+Grades:
+85
+90
+78
+Average Grade: 84.33
