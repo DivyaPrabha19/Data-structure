@@ -1,0 +1,51 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct {
+    char username[30];
+} User;
+
+int searchUser(User *users, int n, const char *username) {
+    for (int i = 0; i < n; i++) {
+        if (strcmp(users[i].username, username) == 0) return i;
+    }
+    return -1;
+}
+
+int main() {
+    int n;
+    char searchUsername[30];
+    printf("Enter number of users: ");
+    scanf("%d", &n);
+    getchar();  // Consume newline
+
+    User *users = malloc(n * sizeof(User));
+    printf("Enter usernames:\n");
+    for (int i = 0; i < n; i++) {
+        fgets(users[i].username, 30, stdin);
+        users[i].username[strcspn(users[i].username, "\n")] = '\0';  // Remove newline
+    }
+
+    printf("Enter username to search: ");
+    fgets(searchUsername, 30, stdin);
+    searchUsername[strcspn(searchUsername, "\n")] = '\0';  // Remove newline
+
+    int result = searchUser(users, n, searchUsername);
+    if (result != -1) {
+        printf("User '%s' found at index %d.\n", searchUsername, result);
+    } else {
+        printf("User '%s' not found.\n", searchUsername);
+    }
+
+    free(users);
+    return 0;
+}
+OUTPUT:
+Enter number of users: 3
+Enter usernames:
+alice
+bob
+charlie
+Enter username to search: bob
+User 'bob' found at index 1.
