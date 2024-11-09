@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+#define ROW 5
+#define COL 5
+
+int isValid(int row, int col, int grid[ROW][COL], int visited[ROW][COL]) {
+    return (row >= 0) && (row < ROW) && (col >= 0) && (col < COL) &&
+           grid[row][col] == 0 && !visited[row][col];
+}
+
+int rowNum[] = {-1, 1, 0, 0};
+int colNum[] = {0, 0, -1, 1};
+
+typedef struct QueueNode {
+    int x, y, dist;
+} QueueNode;
+
+int BFS(int grid[ROW][COL], int srcX, int srcY, int destX, int destY) {
+    if (grid[srcX][srcY] || grid[destX][destY]) return -1;
+
+    int visited[ROW][COL] = {0};
+    visited[srcX][srcY] = 1;
+
+    QueueNode queue[ROW * COL];
+    int front = 0, rear = 0;
+
+    queue[rear++] = (QueueNode){srcX, srcY, 0};
+
+    while (front < rear) {
+        QueueNode curr = queue[front++];
+        int x = curr.x, y = curr.y, dist = curr.dist;
+
+        if (x == destX && y == destY) return dist;
+
+        for (int i = 0; i < 4; i++) {
+            int row = x + rowNum[i];
+            int col = y + colNum[i];
+
+            if (isValid(row, col, grid, visited)) {
+                visited[row][col] = 1;
+                queue[rear++] = (QueueNode){row, col, dist + 1};
+            }
+        }
+    }
+    return -1;
+}
+
+int main() {
+    int grid[ROW][COL] = {
+        {0, 1, 0, 0, 0},
+        {0, 1, 0, 1, 0},
+        {0, 0, 0, 1, 0},
+        {1, 1, 0, 0, 0},
+        {0, 0, 0, 0, 0}
+    };
+    int srcX = 0, srcY = 0, destX = 4, destY = 4;
+    int distance = BFS(grid, srcX, srcY, destX, destY);
+    
+    if (distance != -1) {
+        printf("Shortest path distance: %d\n", distance);
+    } else {
+        printf("No path exists.\n");
+    }
+    return 0;
+}
+OUTPUT:
+Shortest path distance: 8
