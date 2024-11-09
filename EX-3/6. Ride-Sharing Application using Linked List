@@ -1,0 +1,67 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct RideRequest {
+    char riderName[100];
+    struct RideRequest* next;
+} RideRequest;
+
+RideRequest* front = NULL;
+RideRequest* rear = NULL;
+
+void addRideRequest(char *riderName) {
+    RideRequest* newRequest = (RideRequest*)malloc(sizeof(RideRequest));
+    strcpy(newRequest->riderName, riderName);
+    newRequest->next = NULL;
+
+    if (rear == NULL) {
+        front = rear = newRequest;
+    } else {
+        rear->next = newRequest;
+        rear = newRequest;
+    }
+    printf("Ride request from '%s' added to the queue.\n", riderName);
+}
+
+void serveRideRequest() {
+    if (front == NULL) {
+        printf("No ride requests in the queue.\n");
+    } else {
+        RideRequest* temp = front;
+        printf("Serving ride request from: %s\n", front->riderName);
+        front = front->next;
+        free(temp);
+    }
+}
+
+void displayQueue() {
+    if (front == NULL) {
+        printf("No ride requests in the queue.\n");
+    } else {
+        printf("Current Ride Requests:\n");
+        RideRequest* temp = front;
+        while (temp != NULL) {
+            printf("%s\n", temp->riderName);
+            temp = temp->next;
+        }
+    }
+}
+
+int main() {
+    addRideRequest("Rider 1");
+    addRideRequest("Rider 2");
+    displayQueue();
+    serveRideRequest();
+    displayQueue();
+    return 0;
+}
+OUTPUT:
+Ride request from 'Rider 1' added to the queue.
+Ride request from 'Rider 2' added to the queue.
+Current Ride Requests:
+Rider 1
+Rider 2
+Serving ride request from: Rider 1
+Current Ride Requests:
+Rider 2
