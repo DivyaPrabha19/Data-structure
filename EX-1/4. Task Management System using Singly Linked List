@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Task {
+    char description[100];
+    struct Task* next;
+} Task;
+
+Task* head = NULL;
+
+void addTask(char *taskDescription) {
+    Task* newTask = (Task*)malloc(sizeof(Task));
+    strcpy(newTask->description, taskDescription);
+    newTask->next = head;
+    head = newTask;
+}
+
+void removeTask() {
+    if (head != NULL) {
+        Task* temp = head;
+        head = head->next;
+        free(temp);
+    } else {
+        printf("No tasks to remove.\n");
+    }
+}
+
+void displayTasks() {
+    Task* temp = head;
+    while (temp != NULL) {
+        printf("%s\n", temp->description);
+        temp = temp->next;
+    }
+}
+
+int main() {
+    addTask("Complete homework");
+    addTask("Buy groceries");
+    printf("Tasks:\n");
+    displayTasks();
+    removeTask();
+    printf("\nTasks after removal:\n");
+    displayTasks();
+    return 0;
+}
+OUTPUT:
+Tasks:
+Buy groceries
+Complete homework
+
+Tasks after removal:
+Complete homework
