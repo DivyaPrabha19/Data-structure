@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_QUEUE 5
+#define CUSTOMER_NAME_SIZE 100
+
+char ticketQueue[MAX_QUEUE][CUSTOMER_NAME_SIZE];
+int front = -1, rear = -1;
+
+void addCustomer(char *name) {
+    if (rear == MAX_QUEUE - 1) {
+        printf("Queue is full. No more bookings.\n");
+    } else {
+        if (front == -1) front = 0;
+        rear++;
+        strcpy(ticketQueue[rear], name);
+        printf("Customer '%s' added to the queue.\n", name);
+    }
+}
+
+void serveCustomer() {
+    if (front == -1 || front > rear) {
+        printf("No customers in the queue.\n");
+    } else {
+        printf("Serving customer: %s\n", ticketQueue[front]);
+        front++;
+    }
+}
+
+void displayQueue() {
+    if (front == -1 || front > rear) {
+        printf("No customers in the queue.\n");
+    } else {
+        printf("Current Ticket Booking Queue:\n");
+        for (int i = front; i <= rear; i++) {
+            printf("%s\n", ticketQueue[i]);
+        }
+    }
+}
+
+int main() {
+    addCustomer("Customer 1");
+    addCustomer("Customer 2");
+    displayQueue();
+    serveCustomer();
+    displayQueue();
+    return 0;
+}
+OUTPUT:
+Customer 'Customer 1' added to the queue.
+Customer 'Customer 2' added to the queue.
+Current Ticket Booking Queue:
+Customer 1
+Customer 2
+Serving customer: Customer 1
+Current Ticket Booking Queue:
+Customer 2
