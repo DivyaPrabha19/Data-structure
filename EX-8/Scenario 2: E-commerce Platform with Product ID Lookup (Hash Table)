@@ -1,0 +1,77 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+#define TABLE_SIZE 100
+
+typedef struct Product {
+    int id;
+    char name[30];
+    struct Product *next;
+} Product;
+
+Product *hashTable[TABLE_SIZE] = { NULL };
+
+int hashFunction(int id) {
+    return id % TABLE_SIZE;
+}
+
+void insertProduct(int id, const char *name) {
+    int index = hashFunction(id);
+    Product *newProduct = (Product *)malloc(sizeof(Product));
+    newProduct->id = id;
+    strcpy(newProduct->name, name);
+    newProduct->next = hashTable[index];
+    hashTable[index] = newProduct;
+}
+
+Product *searchProduct(int id) {
+    int index = hashFunction(id);
+    Product *temp = hashTable[index];
+    while (temp) {
+        if (temp->id == id) {
+            return temp;
+        }
+        temp = temp->next;
+    }
+    return NULL;
+}
+
+int main() {
+    int id, choice;
+    char name[30];
+
+    while (1) {
+        printf("1. Add product\n2. Search product\n3. Exit\nEnter choice: ");
+        scanf("%d", &choice);
+        if (choice == 3) break;
+
+        if (choice == 1) {
+            printf("Enter product ID and name: ");
+            scanf("%d %s", &id, name);
+            insertProduct(id, name);
+            printf("Product '%s' added.\n", name);
+        } else if (choice == 2) {
+            printf("Enter product ID to search: ");
+            scanf("%d", &id);
+            Product *product = searchProduct(id);
+            if (product) {
+                printf("Product found: ID=%d, Name=%s\n", product->id, product->name);
+            } else {
+                printf("Product with ID %d not found.\n", id);
+            }
+        }
+    }
+    return 0;
+}
+OUTPUT:
+1. Add product
+2. Search product
+3. Exit
+Enter choice: 1
+Enter product ID and name: 101 Pen
+Product 'Pen' added.
+
+Enter choice: 2
+Enter product ID to search: 101
+Product found: ID=101, Name=Pen
