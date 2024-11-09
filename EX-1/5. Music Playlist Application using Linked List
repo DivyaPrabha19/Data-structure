@@ -1,0 +1,79 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+typedef struct Song {
+    char title[100];
+    struct Song* next;
+} Song;
+
+Song* head = NULL;
+
+void addSong(char *songTitle) {
+    Song* newSong = (Song*)malloc(sizeof(Song));
+    strcpy(newSong->title, songTitle);
+    newSong->next = NULL;
+
+    if (head == NULL) {
+        head = newSong;
+    } else {
+        Song* temp = head;
+        while (temp->next != NULL) {
+            temp = temp->next;
+        }
+        temp->next = newSong;
+    }
+}
+
+void removeSong(char *songTitle) {
+    Song* temp = head;
+    Song* prev = NULL;
+
+    if (temp != NULL && strcmp(temp->title, songTitle) == 0) {
+        head = temp->next;
+        free(temp);
+        return;
+    }
+
+    while (temp != NULL && strcmp(temp->title, songTitle) != 0) {
+        prev = temp;
+        temp = temp->next;
+    }
+
+    if (temp == NULL) {
+        printf("Song not found.\n");
+        return;
+    }
+
+    prev->next = temp->next;
+    free(temp);
+}
+
+void displayPlaylist() {
+    Song* temp = head;
+    while (temp != NULL) {
+        printf("%s\n", temp->title);
+        temp = temp->next;
+    }
+}
+
+int main() {
+    addSong("Song 1");
+    addSong("Song 2");
+    addSong("Song 3");
+    printf("Playlist:\n");
+    displayPlaylist();
+    removeSong("Song 2");
+    printf("\nPlaylist after removal:\n");
+    displayPlaylist();
+    return 0;
+}
+OUTPUT:
+Playlist:
+Song 1
+Song 2
+Song 3
+
+Playlist after removal:
+Song 1
+Song 3
