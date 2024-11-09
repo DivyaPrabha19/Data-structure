@@ -1,0 +1,56 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+typedef struct Node {
+    char symbol;
+    struct Node* next;
+} Node;
+
+Node* top = NULL;
+
+void push(char symbol) {
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->symbol = symbol;
+    newNode->next = top;
+    top = newNode;
+}
+
+void pop() {
+    if (top != NULL) {
+        Node* temp = top;
+        top = top->next;
+        free(temp);
+    }
+}
+
+int isValidSyntax(char *expression) {
+    for (int i = 0; expression[i] != '\0'; i++) {
+        if (expression[i] == '(' || expression[i] == '{' || expression[i] == '[') {
+            push(expression[i]);
+        } else if (expression[i] == ')' || expression[i] == '}' || expression[i] == ']') {
+            if (top == NULL) {
+                return 0; // Invalid if no matching opening bracket
+            }
+            if ((expression[i] == ')' && top->symbol == '(') ||
+                (expression[i] == '}' && top->symbol == '{') ||
+                (expression[i] == ']' && top->symbol == '[')) {
+                pop();
+            } else {
+                return 0; // Invalid if mismatched
+            }
+        }
+    }
+    return top == NULL; // If stack is empty, syntax is valid
+}
+
+int main() {
+    char expression[] = "{[()]}";
+    if (isValidSyntax(expression)) {
+        printf("The syntax is valid.\n");
+    } else {
+        printf("The syntax is invalid.\n");
+    }
+    return 0;
+}
+OUTPUT:
+The syntax is valid.
