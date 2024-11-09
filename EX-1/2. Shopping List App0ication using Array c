@@ -1,0 +1,61 @@
+#include <stdio.h>
+#include <string.h>
+
+#define MAX_ITEMS 100
+#define ITEM_SIZE 50
+
+char shoppingList[MAX_ITEMS][ITEM_SIZE];
+int itemCount = 0;
+
+void addItem(char *item) {
+    if (itemCount < MAX_ITEMS) {
+        strcpy(shoppingList[itemCount], item);
+        itemCount++;
+    } else {
+        printf("Shopping list is full.\n");
+    }
+}
+
+void removeItem(char *item) {
+    int found = 0;
+    for (int i = 0; i < itemCount; i++) {
+        if (strcmp(shoppingList[i], item) == 0) {
+            for (int j = i; j < itemCount - 1; j++) {
+                strcpy(shoppingList[j], shoppingList[j + 1]);
+            }
+            itemCount--;
+            found = 1;
+            break;
+        }
+    }
+    if (!found) {
+        printf("Item not found.\n");
+    }
+}
+
+void displayItems() {
+    for (int i = 0; i < itemCount; i++) {
+        printf("%s\n", shoppingList[i]);
+    }
+}
+
+int main() {
+    addItem("Apple");
+    addItem("Milk");
+    addItem("Bread");
+    printf("Shopping List:\n");
+    displayItems();
+    removeItem("Milk");
+    printf("\nShopping List after removal:\n");
+    displayItems();
+    return 0;
+}
+output:
+Shopping List:
+Apple
+Milk
+Bread
+
+Shopping List after removal:
+Apple
+Bread
